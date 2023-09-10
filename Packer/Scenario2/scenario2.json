@@ -1,0 +1,46 @@
+{
+    "variables": {
+        "aws_access_key": "AKIAVNEQO7RYX7UP4D5R",
+        "aws_secret_key": "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"
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "region": "us-east-2",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+                    "root-device-type": "ebs"
+                },
+                "owners": [
+                    "099720109477"
+                ],
+                "most_recent": true
+            },
+            "instance_type": "t2.micro",
+            "ssh_username": "ubuntu",
+            "ami_name": "scenario2-packer-{{timestamp}}"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "./hello.txt",
+            "destination": "/home/ubuntu/"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "ls -al /home/ubuntu",
+                "cat /home/ubuntu/hello.txt"
+            ]
+        },
+        {
+            "type": "shell",
+            "scripts": ["./install_nginx.sh"]
+        }
+    ]
+}

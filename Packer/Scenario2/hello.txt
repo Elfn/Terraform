@@ -1,0 +1,1 @@
+Hello there its a custom AMI with Packer
